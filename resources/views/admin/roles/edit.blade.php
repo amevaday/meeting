@@ -1,0 +1,35 @@
+@extends('layouts.admin')
+@section('content')
+
+<div class="card">
+    <div class="card-header">
+        Edit Role
+    </div>
+
+    <div class="card-body">
+        <form id="role_form" name="role_form" action="{{ route("admin.roles.update", [$role->id]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="form-group">
+                <label for="title">Title*</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ old('title', isset($role) ? $role->title : '') }}">
+                
+            </div>
+            <div class="form-group">
+                <label for="permissions">Permissions*
+                    <span class="btn btn-info btn-xs select-all">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all">{{ trans('global.deselect_all') }}</span></label>
+                <select name="permissions[]" id="permissions" class="form-control select2" multiple="multiple">
+                    @foreach($permissions as $id => $permissions)
+                        <option value="{{ $id }}" {{ (in_array($id, old('permissions', [])) || isset($role) && $role->permissions->contains($id)) ? 'selected' : '' }}>{{ $permissions }}</option>
+                    @endforeach
+                </select>
+               
+            </div>
+            <div>
+                <input type="submit" name="save" value="Save" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
